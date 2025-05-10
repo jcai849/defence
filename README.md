@@ -1,2 +1,2 @@
 direnv allow
-npx serve
+npm run dev
