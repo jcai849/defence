@@ -3,14 +3,189 @@
   <head>
     <meta charset="utf-8">
     <title>A Platform for Large Scale Statistical Modelling Using R</title>
+    <style>
+      .img-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2em;
+  }
+  .img-row img {
+    max-width: 30%;
+    height: auto;
+  }
+    </style>
   </head>
   <body>
     <div class="reveal">
       <div class="slides">
-        <section>Slide 1</section>
-        <section>Slide 2</section>
+        <section data-markdown>
+          <textarea data-template>
+            ## A Platform for Large Scale Statistical Modelling Using R
+
+            Jason Cairns
+
+            Supervised by: Simon Urbanek, Paul Murrell
+          </textarea>
+        </section>
+        <section>
+          <section><h2>Introduction</h2></section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Problem
+
+              - Larger than memory datasets
+              - No satisfactory means of handling in R
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## My Claim
+
+              - It's all in the interface, not the tech
+              - The interface just needs to be discovered
+            </textarea>
+          </section>
+        </section>
+        <section>
+          <section><h2>Key Concepts & Definitions</h2></section>
+          <section><ul>
+              <li class="fragment fade-in-then-semi-out">Large Scale</li>
+              <li class="fragment fade-in-then-semi-out">Chunks, Persistence, Emergence</li>
+              <li class="fragment fade-in-then-semi-out">Split, Application, Combination</li>
+              <li class="fragment fade-in-then-semi-out">Reference, Reference, Use/Mention, De/Materialisation</li>
+              <li class="fragment fade-in-then-semi-out">Concurrent, Parallel, Space, Time, Local, Remote</li>
+            </ul></section>
+        </section>
+        <section>
+          <section><h2>Prior Art</h2></section>
+          <section>
+            <h2>Platforms</h2>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" width="30%" height="30%">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/3/38/Hadoop_logo_new.svg"
+              width="30%"
+              height="30%"
+            >
+          </section>
+          <section>
+            <h2><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg" style="height: 1em; vertical-align: middle;">
+              Packages</h2>
+            <img src="https://spark.posit.co/images/favicon/apple-touch-icon.png" width="30%" height="30%">
+            <img src="https://pbdr.org/ui/img/newpbdr.png" width="30%" height="30%">
+            <img src="https://cran.r-project.org/web/packages/disk.frame/readme/inst/figures/disk.frame.png" width="30%" height="30%">
+            <p><b>SNOW</b>
+              (parallel)</p>
+          </section>
+          <section>
+            <div style="transform: scale(0.35); transform-origin: top;">
+              <div id="comparison-table"></div>
+            </div>
+          </section>
+        </section>
+        <section><section><h2>Constructive Requirements</h2></section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Object System
+
+              -   Layered representation
+              -   Distribution of data structures (space / time)
+              -   Arbitrary underlying data
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Computation
+
+              -   Local & Remote
+              -   Master & Worker
+              -   Persistence of evaluation
+              -   Difficulty of alignment
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Concurrency
+
+              -   Space & Time
+              -   Concurrent & Parallel
+              -   Disk vs Network
+              -   Parallel efficiency (Amdahl\'s Law)
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Reference
+
+              -   Adequacy
+              -   Use/Mention, quasiquotation
+              -   Non-reference -\> Garbage Collection
+            </textarea>
+          </section></section>
+        <section><section><h2>Experimentation</h2></section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Master-Worker
+
+              - Brute-force approach, gained persistence in objects
+              - `distributed.object; make_cluster(); send(); receive()`
+              - Brittle
+              - Insufficient metadata
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              <h2>Message Queue</h2>
+              <img src='images/msgq.svg'>
+            </textarea>
+          </section></section>
+        <section><section><h2>Furthest Iteration</h2></section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Modules
+
+              | Layer               | User       | Package           |
+              |---------------------|------------|-------------------|
+              | Model Usage         | Analyst    | largescalemodels  |
+              | Model Description   | Researcher | largescaleobjects |
+              | Cluster Interaction | Developer  | chunknet          |
+              | Communication       | Architect  | orcv              |
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Interface
+
+              - `DistributedObject; ChunkRef`
+              - `do.dcall(); d(); do.ccall();`
+              - `map_reduce`
+            </textarea>
+          </section>
+          <section><h2>Usage</h2>
+            <div id="lsmr" class="player"></div></section>
+          <section><h2>Usage</h2>
+            <div id="lsr" class="player"></div></section>
+          <section>
+            <h2>Implementation</h2>
+            <img src="./images/comm-ep.svg" height="40%" width="40%">
+            <img src="./images/gc.svg" height="40%" width="40%">
+            <section>
+            </section>
+          </section></section>
+        <section><section><h2>Discussion</h2></section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Discussion
+
+              - A further step
+              - Simple by design
+              - Extensions
+                - Self-healing data
+                - Refinement & robustness in face of real-world use
+            </textarea>
+          </section></section>
       </div>
     </div>
-    <script type="module" src="assets/presentation.js"></script>
+    <script type="module" src="scripts/presentation.js"></script>
   </body>
 </html>

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
+    "asciinema-player": "^3.9.0",
     "reveal.js": "^5.2.1",
     "vite": "^6.3.5"
   },
