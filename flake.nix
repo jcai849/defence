@@ -16,6 +16,7 @@
             superhtml
             typescript-language-server
             dot-language-server
+            uv
           ];
 
           npmDeps = importNpmLock.buildNodeModules {
