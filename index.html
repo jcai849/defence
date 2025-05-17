@@ -175,15 +175,6 @@
               | Communication       | Architect  | orcv              |
             </textarea>
           </section>
-          <section data-markdown>
-            <textarea data-template>
-              ## Interface
-
-              - `DistributedObject; ChunkRef`
-              - `do.dcall(); d(); do.ccall();`
-              - `map_reduce`
-            </textarea>
-          </section>
           <section>
             <div id="graph1" style="text-align:center;"></div>
           </section>
@@ -191,14 +182,39 @@
             <div id="distobjref" style="text-align:center;"></div>
           </section>
           <section><h2>Usage</h2>
-            <div id="lsmr" class="player"></div></section>
+            <div id="lsmr" class="player"></div></section></section>
+        <section><section><h2>orcv</h2></section>
           <section>
-            <h2>Implementation</h2>
-            <img src="./images/comm-ep.svg" height="40%" width="40%">
-            <img src="./images/gc.svg" height="40%" width="40%">
-            <section>
-            </section>
+            <img src="images/orcv.svg">
+            <aside class="notes">
+              A "Listener" for incoming connections is started in a
+              separate thread. When it receives a connection request, it
+              places the connected file descriptor and a reference to a
+              "Background Queue" into a receiver queue.
+
+              Listening to the "Receiver Queue" is a group of "Receivers",
+              each on its own thread, whose job it is to read from the
+              supplied file descriptor and place the read data into the
+              provided queue.
+
+              The calling R process can perform a blocking pop on this
+              background queue.
+
+              Alternatively, the R process may have an ongoing
+              session with another process, maintaining the same file
+              descriptor. In this case, a "File Descriptor Queue" is
+              passed along with the file descriptor into the receiver
+              queue. The receiver's behave invariantly, placing read
+              data into the passed queues, which the R process performs
+              a blocking pop on.
+            </aside>
           </section></section>
+        <section><section><h2>chunknet</h2></section>
+          <section></section></section>
+        <section><section><h2>largescaleobjects</h2>
+            <section></section></section></section>
+        <section><section><h2>largescalemodels</h2>
+            <section></section></section></section>
         <section><section><h2>Discussion</h2></section>
           <section data-markdown>
             <textarea data-template>
