@@ -35,15 +35,15 @@
               ## Problem
 
               - Larger than memory datasets
-              - No satisfactory means of handling in R
+              - Want to express and perform complex statistical algorithms in R over them
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
               ## My Claim
 
-              - It's all in the interface, not the tech
-              - The interface just needs to be discovered
+              - A sound interface is required, in order to guide thought for expressing distributed computation
+              - The interface just needs to be discovered, and the tech "just" needs to follow
             </textarea>
           </section>
         </section>
@@ -51,22 +51,31 @@
           <section><h2>Key Concepts & Definitions</h2></section>
           <section><ul>
               <li class="fragment fade-in-then-semi-out">Large Scale</li>
+              <li class="fragment fade-in-then-semi-out">Statistical Algorithm</li>
               <li class="fragment fade-in-then-semi-out">Chunks, Persistence, Emergence</li>
-              <li class="fragment fade-in-then-semi-out">Split, Application, Combination</li>
-              <li class="fragment fade-in-then-semi-out">Reference, Reference, Use/Mention, De/Materialisation</li>
+              <!-- <li class="fragment fade-in-then-semi-out">Split, Application, Combination</li> -->
               <li class="fragment fade-in-then-semi-out">Concurrent, Parallel, Space, Time, Local, Remote</li>
+              <!-- <li class="fragment fade-in-then-semi-out">Reference, Reference, Use/Mention, De/Materialisation</li> -->
             </ul></section>
         </section>
         <section>
           <section><h2>Prior Art</h2></section>
           <section>
             <h2>Platforms</h2>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" width="30%" height="30%">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/3/38/Hadoop_logo_new.svg"
               width="30%"
               height="30%"
             >
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Apache_Spark_logo.svg" width="30%" height="30%">
+            <aside class="notes">
+              Hadoop: Collection of utilities, around a distributed memory part
+                      (HDFS), and processing, MapReduce. Pioneering, but limited
+                      for iterative computation
+              Spark: Builds upon hadoop, allowing for iteration over a Resilient
+                     Distributed Dataset, and increasingly, off-the-shelf ML
+                     operations, but inexpressive for novel statistical algorithms
+            </aside>
           </section>
           <section>
             <h2><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg" style="height: 1em; vertical-align: middle;">
@@ -76,6 +85,20 @@
             <img src="https://cran.r-project.org/web/packages/disk.frame/readme/inst/figures/disk.frame.png" width="30%" height="30%">
             <p><b>SNOW</b>
               (parallel)</p>
+            <aside class="notes">
+              sparklyr: An interface to spark from R, still off-the-shelf, little primitives
+            pbdr: Almost ideal. For MPI-based computation, requires SIMD
+                  programming (non-interactive). Other computations allow
+                  for interactivity, but only offer RPC tooling and little
+                  more. Distributed matrices, but no other arbitrary data,
+                  such as distributed data frames
+            disk.frame: actually deprecated in favour of arror since
+                        thesis submission. Arbitrarily large datasets on disk,
+                        read streamwise. Inherently non-parallel.
+            SNOW: Extremely simple setup and teardown of cluster, can push
+                  computations, but results don't persist in a straightforward
+                  manner on the worker nodes
+            </aside>
           </section>
           <section>
             <div style="transform: scale(0.35); transform-origin: top;">
@@ -161,10 +184,14 @@
               - `map_reduce`
             </textarea>
           </section>
+          <section>
+            <div id="graph1" style="text-align:center;"></div>
+          </section>
+          <section>
+            <div id="graph2" style="text-align:center;"></div>
+          </section>
           <section><h2>Usage</h2>
             <div id="lsmr" class="player"></div></section>
-          <section><h2>Usage</h2>
-            <div id="lsr" class="player"></div></section>
           <section>
             <h2>Implementation</h2>
             <img src="./images/comm-ep.svg" height="40%" width="40%">
@@ -186,6 +213,6 @@
           </section></section>
       </div>
     </div>
-    <script type="module" src="scripts/presentation.js"></script>
+    <script type="module" src="scripts/main.js"></script>
   </body>
 </html>

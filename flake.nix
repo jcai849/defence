@@ -15,6 +15,7 @@
             importNpmLock.hooks.linkNodeModulesHook
             superhtml
             typescript-language-server
+            dot-language-server
           ];
 
           npmDeps = importNpmLock.buildNodeModules {
