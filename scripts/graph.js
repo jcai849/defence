@@ -34,4 +34,11 @@ async function createGraphWithButtons(graphName, numStates) {
   return { render, restart: () => { index = 0; render(); } };
 }
 
+async function createStaticGraph(graphName) {
+  const graphDiv = document.getElementById(graphName);
+  const dot = await fetch(`assets/${graphName}.dot`).then(r => r.text())
+  graphviz(graphDiv).renderDot(dot)
+}
+
+createStaticGraph("distobjref")
 createGraphWithButtons("graph1", 3)
