@@ -55,7 +55,10 @@ class Cluster:
         self.attributes = attributes
 
     def render(self, g: graphviz.graphs.Digraph):
-        with g.subgraph(name=f"cluster_{self.name}", **self.attributes) as c:
+        with g.subgraph(
+            name=f"cluster_{self.name}",
+            graph_attr={"label": self.name} | self.attributes,
+        ) as c:
             for e in self.elements:
                 e.render(c)
 
@@ -105,7 +108,7 @@ class Scene:
 
     @override
     def __str__(self) -> str:
-        g = graphviz.Digraph()
+        g = graphviz.Digraph(graph_attr={"bgcolor": "transparent"})
         for e in self.elements:
             e.render(g)
         return g.source

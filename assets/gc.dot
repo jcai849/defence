@@ -1,4 +1,6 @@
 digraph garbage_collection {
+    label="Chunk Lineage"
+    graph [bgcolor=transparent]
 	rankdir="LR";
 	c1[label="Chunk 1"];
 	c2[label="Chunk 2"];
