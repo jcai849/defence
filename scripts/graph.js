@@ -30,7 +30,7 @@ async function createGraphWithButtons(graphName, numStates) {
   makeButton("←", () => { if (index > 0) index--; render(); });
   makeButton("→", () => { if (index < dotStates.length - 1) index++; render(); });
   makeButton("↞", () => { index = 0; render(); });
-  graphDiv.insertAdjacentElement("afterend", btnGroup);
+  graphDiv.insertAdjacentElement("beforebegin", btnGroup);
   render();
 
   return { render, restart: () => { index = 0; render(); } };
@@ -45,4 +45,4 @@ async function createStaticGraph(graphName) {
 createStaticGraph("distobjref")
 createStaticGraph("gc")
 createGraphWithButtons("graph1", 3)
-createGraphWithButtons("chunknet", 4)
+createGraphWithButtons("chunknet", 14)

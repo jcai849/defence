@@ -15,5 +15,6 @@ let deck = new Reveal();
 deck.initialize({
   plugins: [RevealMarkdown, RevealNotes, RevealHighlight],
   totalTime: 1200,
-  hash: true
+  hash: true,
+  center: false
 });

@@ -19,7 +19,7 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <section data-markdown>
+        <section data-markdown class="center">
           <textarea data-template>
             ## A Platform for Large Scale Statistical Modelling Using R
 
@@ -28,9 +28,9 @@
             Supervised by: Simon Urbanek, Paul Murrell
           </textarea>
         </section>
-        <section>
-          <section><h2>Introduction</h2></section>
-          <section data-markdown>
+        <section class="center">
+          <section class="center"><h2>Introduction</h2></section>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Problem
 
@@ -38,7 +38,7 @@
               - Want to express and perform complex statistical algorithms in R over them
             </textarea>
           </section>
-          <section data-markdown>
+          <section data-markdown class="center">
             <textarea data-template>
               ## My Claim
 
@@ -47,9 +47,9 @@
             </textarea>
           </section>
         </section>
-        <section>
-          <section><h2>Key Concepts & Definitions</h2></section>
-          <section><ul>
+        <section class="center">
+          <section class="center"><h2>Key Concepts & Definitions</h2></section>
+          <section class="center"><ul>
               <li class="fragment fade-in-then-semi-out">Large Scale</li>
               <li class="fragment fade-in-then-semi-out">Statistical Algorithm</li>
               <li class="fragment fade-in-then-semi-out">Chunks, Persistence, Emergence</li>
@@ -58,9 +58,9 @@
               <!-- <li class="fragment fade-in-then-semi-out">Reference, Reference, Use/Mention, De/Materialisation</li> -->
             </ul></section>
         </section>
-        <section>
-          <section><h2>Prior Art</h2></section>
-          <section>
+        <section class="center">
+          <section class="center"><h2>Prior Art</h2></section>
+          <section class="center">
             <h2>Platforms</h2>
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/3/38/Hadoop_logo_new.svg"
@@ -77,7 +77,7 @@
                      operations, but inexpressive for novel statistical algorithms
             </aside>
           </section>
-          <section>
+          <section class="center">
             <h2><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg" style="height: 1em; vertical-align: middle;">
               Packages</h2>
             <img src="https://spark.posit.co/images/favicon/apple-touch-icon.png" width="30%" height="30%">
@@ -100,14 +100,14 @@
                   manner on the worker nodes
             </aside>
           </section>
-          <section>
+          <section class="center">
             <div style="transform: scale(0.35); transform-origin: top;">
               <div id="comparison-table"></div>
             </div>
           </section>
         </section>
-        <section><section><h2>Constructive Requirements</h2></section>
-          <section data-markdown>
+        <section class="center"><section class="center"><h2>Constructive Requirements</h2></section>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Object System
 
@@ -116,7 +116,7 @@
               -   Arbitrary underlying data
             </textarea>
           </section>
-          <section data-markdown>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Computation
 
@@ -126,7 +126,7 @@
               -   Difficulty of alignment
             </textarea>
           </section>
-          <section data-markdown>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Concurrency
 
@@ -136,7 +136,7 @@
               -   Parallel efficiency (Amdahl\'s Law)
             </textarea>
           </section>
-          <section data-markdown>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Reference
 
@@ -145,8 +145,8 @@
               -   Non-reference -\> Garbage Collection
             </textarea>
           </section></section>
-        <section><section><h2>Experimentation</h2></section>
-          <section data-markdown>
+        <section class="center"><section class="center"><h2>Experimentation</h2></section>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Master-Worker
 
@@ -156,14 +156,14 @@
               - Insufficient metadata
             </textarea>
           </section>
-          <section data-markdown>
+          <section data-markdown class="center">
             <textarea data-template>
               <h2>Message Queue</h2>
               <img src='images/msgq.svg'>
             </textarea>
           </section></section>
-        <section><section><h2>Furthest Iteration</h2></section>
-          <section data-markdown>
+        <section class="center"><section class="center"><h2>Furthest Iteration</h2></section>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Modules
 
@@ -175,10 +175,10 @@
               | Communication       | Architect  | orcv              |
             </textarea>
           </section>
-          <section><h2>Usage</h2>
+          <section class="center"><h2>Usage</h2>
             <div id="lsmr" class="player"></div></section></section>
-        <section><section><h2>orcv</h2></section>
-          <section>
+        <section class="center"><section class="center"><h2>orcv</h2></section>
+          <section class="center">
             <img src="images/orcv.svg">
             <aside class="notes">
               A "Listener" for incoming connections is started in a
@@ -203,10 +203,9 @@
               a blocking pop on.
             </aside>
           </section></section>
-        <section><section><h2>chunknet</h2></section>
-          <section>
-            do.ccall
-            <div id="chunknet" style="text-align:center;"></div>
+        <section><section class="center"><h2>chunknet</h2></section>
+          <section data-vertical-align-top>
+            <div id="chunknet" style="text-align:top;"></div>
             <aside class="notes">
               To call computations on chunks in a distributed manner.
           
@@ -275,21 +274,21 @@
               descriptor rather than a location being stored as the audience.
             </aside>
           </section>
-          <section>
+          <section class="center">
             <img src="images/worker-data.svg">
             <img src="images/locator-data.svg">
             <div id="gc" style="text-align:center;"></div>
           </section></section>
-        <section><section><h2>largescaleobjects</h2>
+        <section class="center"><section class="center"><h2>largescaleobjects</h2>
         </section>
-          <section>
+          <section class="center">
             <div id="distobjref" style="text-align:center;"></div>
           </section>
-            <section></section></section>
-        <section><section><h2>largescalemodels</h2>
-            <section></section></section></section>
-        <section><section><h2>Discussion</h2></section>
-          <section data-markdown>
+            <section class="center"></section></section>
+        <section class="center"><section class="center"><h2>largescalemodels</h2>
+            <section class="center"></section></section></section>
+        <section class="center"><section class="center"><h2>Discussion</h2></section>
+          <section data-markdown class="center">
             <textarea data-template>
               ## Discussion
 
