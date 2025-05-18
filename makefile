@@ -1,4 +1,4 @@
-all: images/orcv.svg images/worker-data.svg images/locator-data.svg assets/graphs/chunknet_1.dot
+all: images/orcv.svg images/worker-data.svg images/locator-data.svg assets/graphs/chunknet_1.dot assets/graphs/dlm_1.dot
 
 images/%.svg: assets/%.svgbob
 	svgbob $< >$@
@@ -8,6 +8,9 @@ images/%.svg: assets/%.puml
 
 assets/graphs/chunknet_1.dot: graph-gen/chunknet.py
 	cd graph-gen && uv run chunknet.py
+
+assets/graphs/dlm_1.dot: graph-gen/dlm.py
+	cd graph-gen && uv run dlm.py
 
 clean:
 	rm -rf images/*
