@@ -106,7 +106,8 @@
             </div>
           </section>
         </section>
-        <section class="center"><section class="center"><h2>Constructive Requirements</h2></section>
+        <section class="center">
+          <section class="center"><h2>Constructive Requirements</h2></section>
           <section data-markdown class="center">
             <textarea data-template>
               ## Object System
@@ -144,25 +145,10 @@
               -   Use/Mention, quasiquotation
               -   Non-reference -\> Garbage Collection
             </textarea>
-          </section></section>
-        <section class="center"><section class="center"><h2>Experimentation</h2></section>
-          <section data-markdown class="center">
-            <textarea data-template>
-              ## Master-Worker
-
-              - Brute-force approach, gained persistence in objects
-              - `distributed.object; make_cluster(); send(); receive()`
-              - Brittle
-              - Insufficient metadata
-            </textarea>
           </section>
-          <section data-markdown class="center">
-            <textarea data-template>
-              <h2>Message Queue</h2>
-              <img src='images/msgq.svg'>
-            </textarea>
-          </section></section>
-        <section class="center"><section class="center"><h2>Furthest Iteration</h2></section>
+        </section>
+        <section class="center">
+          <section class="center"><h2>Furthest Iteration</h2></section>
           <section data-markdown class="center">
             <textarea data-template>
               ## Modules
@@ -175,8 +161,7 @@
               | Communication       | Architect  | orcv              |
             </textarea>
           </section>
-          <section class="center"><h2>Usage</h2>
-            <div id="lsmr" class="player"></div></section></section>
+        </section>
         <section class="center"><section class="center"><h2>orcv</h2></section>
           <section class="center">
             <img src="images/orcv.svg">
@@ -203,7 +188,8 @@
               a blocking pop on.
             </aside>
           </section></section>
-        <section><section class="center"><h2>chunknet</h2></section>
+        <section>
+          <section class="center"><h2>chunknet</h2></section>
           <section data-vertical-align-top>
             <div id="chunknet" style="text-align:top;"></div>
             <aside class="notes">
@@ -278,15 +264,75 @@
             <img src="images/worker-data.svg">
             <img src="images/locator-data.svg">
             <div id="gc" style="text-align:center;"></div>
-          </section></section>
-        <section class="center"><section class="center"><h2>largescaleobjects</h2>
-        </section>
-          <section class="center">
-            <div id="distobjref" style="text-align:center;"></div>
           </section>
-            <section class="center"></section></section>
-        <section class="center"><section class="center"><h2>largescalemodels</h2>
-            <section class="center"></section></section></section>
+        </section>
+        <section class="center">
+          <section class="center"><h2>largescaleobjects</h2></section>
+          <section class="center">
+            Distributed Object
+            <div id="distobjref" style="text-align:center;"></div>
+            <aside class="notes">Array of Chunk References</aside>
+          </section>
+          <section class="center">
+          </section>
+        </section>
+        <section class="center">
+          <section class="center"><h2>largescalemodels</h2></section>
+          <section class="center">
+            dLM
+          </section>
+          <section class="center">
+            <h2>dLASSO</h2>
+            \[
+              \begin{aligned}
+                A = \begin{bmatrix}
+                    A_1\\
+                    \vdots \\
+                    A_N
+                \end{bmatrix},&
+                \quad b=\begin{bmatrix}
+                    b_1\\
+                    \vdots \\
+                    b_N
+                \end{bmatrix}\\
+                A_i \in \mathbb{R}^{m_i\times n},& \quad b_i \in \mathbb{R}^{m_i}
+            \end{aligned}
+          \]
+          </section>
+          <section class="center">
+            \[
+          \begin{aligned}
+            x^{k+1} &= \arg \min_x \frac{1}{2} \left|\| Ax - b \right\|^2_2 + \frac{\rho}{2} \left\| x - z + u \right\|^2_2 \\
+            z^{k+1} &= S_z(\overline{x}^{k+1} +\overline{u}) \\
+            u^{k+1} &= u + x^{k+1} - z^{k+1}
+          \end{aligned}
+          \]
+            <aside class="notes">
+              S is soft thresholding parameter
+              rho is penalty parameter
+            </aside>
+          </section>
+          <section class="center">
+            <pre><code data-trim class="language-r"><script type="text/template">
+                d.x_update <- d(function(x_prev, A, b, u_prev, rho, z_prev) {
+                  argmin(x_prev, function(x_prev)
+                    (1/2)*l2_norm(A %*% x_prev - b)^2 +
+                    (rho/2)*l2_norm(x_prev - z_prev + u_prev)^2)
+                })
+            </script></code></pre>
+            <pre><code data-trim class="language-r"><script type="text/template">
+                while (l1_norm(z_curr - z_prev) > tolerance) {
+                  ...
+                  x_curr <- d.x_update(x_prev, A, b, u_prev, rho, z_prev)
+                  z_curr <- S_z(rowMeans(emerge(x_curr)) +
+                                rowMeans(emerge(u_curr)))
+                  u_curr <- u_prev + x_curr - z_curr
+                }
+            </script></code></pre>
+          </section>
+          <section class="center"><h2>Usage</h2>
+            <div id="lsmr" class="player"></div></section>
+        </section>
         <section class="center"><section class="center"><h2>Discussion</h2></section>
           <section data-markdown class="center">
             <textarea data-template>
