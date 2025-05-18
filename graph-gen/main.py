@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import override
+from typing import Any, override
 import graphviz
 from pathlib import Path
 import math
@@ -13,31 +13,49 @@ class Remove:
 @dataclass
 class Node:
     name: str
+    attributes: dict[str, Any]
+
+    def __init__(self, name, **attributes):
+        self.name = name
+        self.attributes = attributes
 
     def render(self, g: graphviz.graphs.Digraph) -> None:
-        g.node(name=self.name)
+        g.node(name=self.name, **self.attributes)
 
 
 @dataclass
 class Edge:
     start: str
     end: str
+    attributes: dict[str, Any]
+
+    def __init__(self, start, end, **attributes):
+        self.start = start
+        self.end = end
+        self.attributes = attributes
 
     def render(self, g: graphviz.graphs.Digraph) -> None:
-        g.edge(tail_name=self.start, head_name=self.end)
+        g.edge(tail_name=self.start, head_name=self.end, **self.attributes)
 
 
 @dataclass
 class Cluster:
     name: str
     elements: "tuple[Node | Edge | Cluster, ...]"
+    attributes: dict[str, Any]
 
-    def __init__(self, name: str, *elements: "Node | Edge | Cluster"):
+    def __init__(
+        self,
+        name: str,
+        *elements: "Node | Edge | Cluster",
+        **attributes: dict[str, Any],
+    ):
         self.name = name
         self.elements = elements
+        self.attributes = attributes
 
     def render(self, g: graphviz.graphs.Digraph):
-        with g.subgraph(name=f"cluster_{self.name}") as c:
+        with g.subgraph(name=f"cluster_{self.name}", **self.attributes) as c:
             for e in self.elements:
                 e.render(c)
 
