@@ -13,7 +13,9 @@ async function createGraphWithButtons(graphName, numStates) {
   );
 
   const gv = graphviz(graphDiv) .transition(() => d3.transition().duration(500));
+  
   const render = () => gv.renderDot(dotStates[index]);
+  
 
   // Create button group
   const btnGroup = document.createElement("div");
@@ -25,9 +27,9 @@ async function createGraphWithButtons(graphName, numStates) {
     btn.onclick = onClick;
     btnGroup.appendChild(btn);
   };
-  makeButton("Back", () => { if (index > 0) index--; render(); });
-  makeButton("Forward", () => { if (index < dotStates.length - 1) index++; render(); });
-  makeButton("Restart", () => { index = 0; render(); });
+  makeButton("←", () => { if (index > 0) index--; render(); });
+  makeButton("→", () => { if (index < dotStates.length - 1) index++; render(); });
+  makeButton("↞", () => { index = 0; render(); });
   graphDiv.insertAdjacentElement("afterend", btnGroup);
   render();
 
