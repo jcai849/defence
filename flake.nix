@@ -26,6 +26,8 @@
             npmRoot = ./.;
             inherit nodejs;
           };
+
+          shellHook = "${pkgs.gnumake}/bin/make";
         };
     };
 }
