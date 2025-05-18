@@ -273,7 +273,42 @@
             <div id="distobjref" style="text-align:center;"></div>
             <aside class="notes">Array of Chunk References</aside>
           </section>
-          <section class="center">
+          <section data-markdown class="center">
+            <textarea data-template>
+              ## `do.dcall()`
+
+              - Wrapper around `do.ccall()`
+              - May align arguments beforehand (rabbithole)
+              - Magic:
+              - `d(f) == \(...) do.dcall(f, ...)`
+            </textarea>
+          </section>
+          <section data-markdown class="center">
+            <textarea data-template>
+              ## `emerge()`
+
+              - `pull()` then `combine()`; `combine` generic on args
+              - e.g. `table()`
+            </textarea>
+          </section>
+          <section data-markdown class="center">
+            <textarea data-template>
+              ## `map_reduce(map, reduce)`
+
+              - `do.dcall(map, ...) |> emerge() |> reduce()`
+              - e.g. `summary() == map_reduce(.Generic, .Generic)`
+              - e.g. `sum() == do.dcall(sum) |> emerge() |> combine |> sum()` where `combine = identity`
+            </textarea>
+          </section>
+          <section data-markdown class="center">
+            <textarea data-template>
+              ## `shuffle(X, index)`
+
+              - as used in `group_by()`
+              - tabulate index and find even distribution of keys based on index frequency.
+              - for each key, subset each chunk for corresponding components.
+              - let worker nodes shuffle themselves.
+            </textarea>
           </section>
         </section>
         <section>
