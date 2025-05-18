@@ -1,0 +1,24 @@
+digraph dreduce {
+    bgcolor=transparent
+
+	m[label="master process"];
+
+	{
+		rank=same;
+		q1[label="Chunk 1"];
+		q2[label="Chunk 2"];
+		q3[label="Chunk 3"];
+	}
+
+	p1[label="Process 1"];
+	p2[label="Process 2"];
+	p3[label="Process 3"];
+
+	m -> {q1 q2 q3};
+	q1 -> p1;
+	q2 -> p2;
+	q3 -> p3;
+
+	p1 -> p2 -> p3;
+	p3 -> "Result Chunk" -> m
+}
