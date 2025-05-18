@@ -1,0 +1,28 @@
+@startuml
+
+!theme mars
+skinparam BackgroundColor transparent
+skinparam componentStyle rectangle
+
+title Persistent Locator Stores
+
+component "Data Location Store" as DS {
+    component href { 
+    }
+    component data_location {
+    }
+}
+data_location }|--|{ href
+
+component "Node Info Store" as NS {
+    component location {
+    }
+    component loading {
+    }
+}
+location ||--|| loading
+
+
+data_location ||--|| location
+
+@enduml

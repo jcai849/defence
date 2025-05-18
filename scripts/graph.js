@@ -41,4 +41,5 @@ async function createStaticGraph(graphName) {
 }
 
 createStaticGraph("distobjref")
+createStaticGraph("gc")
 createGraphWithButtons("graph1", 3)

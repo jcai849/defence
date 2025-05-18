@@ -17,6 +17,7 @@
             typescript-language-server
             dot-language-server
             svgbob
+            plantuml
             uv
           ];
 

@@ -4,3 +4,5 @@ assets/graphs
 graph-gen/__pycache__
 graph-gen/typings/graphviz
 images/orcv.svg
+assets/images
+images

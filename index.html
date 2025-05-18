@@ -210,7 +210,81 @@
             </aside>
           </section></section>
         <section><section><h2>chunknet</h2></section>
-          <section></section></section>
+          <section>
+            do.ccall
+            <aside class="notes">
+              To call computations on chunks in a distributed manner.
+          
+              A "Master" or "Client" will determine the locations that a
+              computation will take place, based on a target location, if
+              any, existing chunk locations which minimise data movement,
+              and current loading of worker nodes.
+
+              A "Locator" table is queried for non-cached locations and
+              loading, in aid of this. Data is pushed to locations if needed,
+              and the Locator table is  updated to reflect locations of newly
+              pushed data. Currently this is done with a special "Locator"
+              service on its own node, but could in theory be run over a
+              Distributed Hash Table, for a fully peer-to-peer topology.
+
+              The computations are then pushed to their locations.
+
+              From the requesting client's perspective, the ID's and the
+              computation references are created and composed within chunk
+              references to the the computation output.
+
+              The computation chunk references are recorded with their
+              locations in the Locator table.
+
+              You can see the recursive nature of Chunk References tracking
+              their originating computations, and Computation References
+              tracking their input Chunk References. This is the way Garbage
+              Collection is performed; with no references remaining on the
+              client, R performs its sweep, and the chunk reference finalisers
+              issue a DELETE command on the whole chain.
+
+              On the worker, there is a flurry of activity upon receiving
+              a computation request.
+
+              The argument chunks are all registered in its internal
+              Data Store. Chunks that should exist on other nodes are
+              asynchronously requested. The computation is registered in a
+              Computation Store, indexed by its arguments. If all argument
+              chunks are available locally, the computation is run and the
+              main Event Loop is returned to.
+
+              If data was pending externally, what happens in detail is that
+              the locator table is queried for the locations of the chunks,
+              and a request for the data is forwarded to those locations. At
+              the requested locations, that node will assess its own local
+              Data Store. If the requested data is there, it will immediately
+              send it. If the data is the result of a computation on its
+              own node, it will mark the chunk the the "Audience" location
+              requesting it, in order to send it when ready.
+
+              Once the data is send to a worker node, it will do a lookup
+              of the data against its own Data Store, responding to any
+              external nodes awaiting the data and also checking which locally
+              pending computations require this data. If any compuations
+              do, it will mark this prerequisite fulfilled.  If this is the
+              last prerequisite for a computation, that computation is run,
+              and any output of the computation is posted back to the noted
+              itself, to trigger the process of audience response and pending
+              computations again.
+
+              Clients may chain do.ccalls without any intermediate
+              computations required to complete; they are non-blocking. When
+              output is firmly desired, a blocking request is made for the
+              data of the final chunk reference, and this triggers that same
+              data lookup on the location of the worker node, but with a file
+              descriptor rather than a location being stored as the audience.
+            </aside>
+          </section>
+          <section>
+            <img src="images/worker-data.svg">
+            <img src="images/locator-data.svg">
+            <div id="gc" style="text-align:center;"></div>
+          </section></section>
         <section><section><h2>largescaleobjects</h2>
             <section></section></section></section>
         <section><section><h2>largescalemodels</h2>

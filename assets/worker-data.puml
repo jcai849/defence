@@ -1,0 +1,37 @@
+@startuml
+
+!theme mars
+skinparam BackgroundColor transparent
+skinparam componentStyle rectangle
+
+title Persistent Worker Stores
+
+component "Computation Store" as CS {
+    component prereq_href { 
+    }
+    component Computation {
+    }
+}
+prereq_href }o-|{ Computation
+
+component "Data Store" as DS {
+    component data_href {
+    }
+    component Chunk {
+    }
+}
+data_href ||--|| Chunk
+
+component "Waiting FDs" as FDs {
+  component href {
+  }
+  component FD {
+  }
+}
+FD }|--|{ href
+
+
+
+data_href ||--|| href
+prereq_href ||--|| data_href
+@enduml
