@@ -1,8 +1,9 @@
-from dataclasses import dataclass
-from typing import Any, override
-import graphviz
-from pathlib import Path
 import math
+from dataclasses import dataclass
+from pathlib import Path
+from typing import override
+
+import graphviz
 
 
 @dataclass
@@ -13,9 +14,9 @@ class Remove:
 @dataclass
 class Node:
     name: str
-    attributes: dict[str, Any]
+    attributes: dict[str, str]
 
-    def __init__(self, name, **attributes):
+    def __init__(self, name: str, **attributes: str):
         self.name = name
         self.attributes = attributes
 
@@ -27,9 +28,9 @@ class Node:
 class Edge:
     start: str
     end: str
-    attributes: dict[str, Any]
+    attributes: dict[str, str]
 
-    def __init__(self, start, end, **attributes):
+    def __init__(self, start: str, end: str, **attributes: str):
         self.start = start
         self.end = end
         self.attributes = attributes
@@ -42,13 +43,13 @@ class Edge:
 class Cluster:
     name: str
     elements: "tuple[Node | Edge | Cluster, ...]"
-    attributes: dict[str, Any]
+    attributes: dict[str, str]
 
     def __init__(
         self,
         name: str,
         *elements: "Node | Edge | Cluster",
-        **attributes: dict[str, Any],
+        **attributes: str,
     ):
         self.name = name
         self.elements = elements
@@ -108,7 +109,7 @@ class Scene:
 
     @override
     def __str__(self) -> str:
-        g = graphviz.Digraph(graph_attr={"bgcolor": "transparent"})
+        g = graphviz.Digraph(graph_attr={"bgcolor": "transparent", "compound": "true"})
         for e in self.elements:
             e.render(g)
         return g.source
