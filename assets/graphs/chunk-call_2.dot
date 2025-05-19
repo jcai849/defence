@@ -1,0 +1,15 @@
+digraph {
+	graph [bgcolor=transparent compound=true]
+	"Chunk Reference 1" -> "Chunk 1" [style=dashed]
+	subgraph cluster_Worker {
+		graph [label=Worker]
+		Process
+		"Chunk 1"
+	}
+	subgraph cluster_Master {
+		graph [label=Master]
+		"Chunk Reference 1"
+		"ccall(f, CR1)"
+	}
+	"Chunk Reference 1" -> "ccall(f, CR1)"
+}
