@@ -43,19 +43,16 @@
               ## My Claim
 
               - A sound interface is required, in order to guide thought for expressing distributed computation
-              - The interface just needs to be discovered, and the tech "just" needs to follow
+              - The interface just needs to be discovered, and the implementation needs to follow
             </textarea>
           </section>
         </section>
         <section class="center">
-          <section class="center"><h2>Key Concepts & Definitions</h2></section>
+          <section class="center"><h2>Key Concept: Large Scale</h2></section>
           <section class="center"><ul>
-              <li class="fragment fade-in-then-semi-out">Large Scale</li>
-              <li class="fragment fade-in-then-semi-out">Statistical Algorithm</li>
-              <li class="fragment fade-in-then-semi-out">Chunks, Persistence, Emergence</li>
-              <!-- <li class="fragment fade-in-then-semi-out">Split, Application, Combination</li> -->
-              <li class="fragment fade-in-then-semi-out">Concurrent, Parallel, Space, Time, Local, Remote</li>
-              <!-- <li class="fragment fade-in-then-semi-out">Reference, Reference, Use/Mention, De/Materialisation</li> -->
+              <li class="fragment fade-in-then-semi-out">Splitting into chunks: essential concept</li>
+              <li class="fragment fade-in-then-semi-out">Multiple machines for scalability (vs. concurrent approach)</li>
+              <li class="fragment fade-in-then-semi-out">Communication: topology, efficiency</li>
             </ul></section>
         </section>
         <section class="center">
@@ -107,63 +104,166 @@
           </section>
         </section>
         <section class="center">
-          <section class="center"><h2>Constructive Requirements</h2></section>
+          <section class="center"><h2>User Interface</h2></section>
           <section data-markdown class="center">
             <textarea data-template>
-              ## Object System
+              ## Layered Approach
 
-              -   Layered representation
-              -   Distribution of data structures (space / time)
-              -   Arbitrary underlying data
+              - Invariant to distribution of data structures (space / time)
+              - Arbitrary underlying data
+              - Model Usage, Description and Low-level interaction
             </textarea>
           </section>
           <section data-markdown class="center">
             <textarea data-template>
-              ## Computation
+              ## Model Usage
+              ### Largescalemodels
 
-              -   Local & Remote
-              -   Master & Worker
-              -   Persistence of evaluation
-              -   Difficulty of alignment
+              ```r
+              x_hat <- dlasso(X,y)
+              ```
             </textarea>
           </section>
           <section data-markdown class="center">
             <textarea data-template>
-              ## Concurrency
+              ## Model Description
+              ### largescaleobjects
 
-              -   Space & Time
-              -   Concurrent & Parallel
-              -   Disk vs Network
-              -   Parallel efficiency (Amdahl\'s Law)
+              ```r
+              b <- A %*% x + e
+              ...
+              shuffle(X, by=b)
+              ```
             </textarea>
           </section>
           <section data-markdown class="center">
             <textarea data-template>
-              ## Reference
+              ## Low-level Interaction
+              ### chunknet, orcv
 
-              -   Adequacy
-              -   Use/Mention, quasiquotation
-              -   Non-reference -\> Garbage Collection
+              ```r
+              tab <- do.ccall(table, x)
+              emerge(tab)
+              ```
             </textarea>
           </section>
         </section>
         <section class="center">
-          <section class="center"><h2>Furthest Iteration</h2></section>
-          <section data-markdown class="center">
-            <textarea data-template>
-              ## Modules
-
-              | Layer               | User       | Package           |
-              |---------------------|------------|-------------------|
-              | Model Usage         | Analyst    | largescalemodels  |
-              | Model Description   | Researcher | largescaleobjects |
-              | Cluster Interaction | Developer  | chunknet          |
-              | Communication       | Architect  | orcv              |
-            </textarea>
+          <section class="center"><h2>Design & Implementation</h2></section>
+          <section class="center">
+            <h2>Distributed Object</h2>
+            <div id="distobjref" style="text-align:center;"></div>
+            <aside class="notes">Array of Chunk References</aside>
+          </section>
+          <section class="center">
+            <h2>Chunk Calling</h2>
+          </section>
+          <section class="center">
+            <h2>Chunk Lineage</h2>
+            <div id="gc" style="text-align:center;"></div>
+          </section>
+          <section class="center">
+            <h3>Distributed Object Calling</h3>
+            <ul>
+              <li>e.g. biglm</li>
+              <li>Simplification: One chunk at a time.</li>
+              <li>Initial chunk call, followed by rolling update along chunks</li>
+              </ul>
+          </section>
+          <section>
+            <h3>Distributed Object Calling</h3>
+            <div id="dlm" style="text-align:top;"></div>
+          </section>
+          <section class="center">
+            <h2>Distributed LASSO</h2>
+              \[
+                \begin{aligned}
+                  A = \begin{bmatrix}
+                      A_1\\
+                      \vdots \\
+                      A_N
+                  \end{bmatrix},&
+                  \quad b=\begin{bmatrix}
+                      b_1\\
+                      \vdots \\
+                      b_N
+                  \end{bmatrix}\\
+                  A_i \in \mathbb{R}^{m_i\times n},& \quad b_i \in \mathbb{R}^{m_i}
+              \end{aligned}
+            \]
+          </section>
+          <section class="center">
+              \[
+            \begin{aligned}
+              x^{k+1} &= \arg \min_x \frac{1}{2} \left|\| Ax - b \right\|^2_2 + \frac{\rho}{2} \left\| x - z + u \right\|^2_2 \\
+              z^{k+1} &= S_z(\overline{x}^{k+1} +\overline{u}) \\
+              u^{k+1} &= u + x^{k+1} - z^{k+1}
+            \end{aligned}
+            \]
+            <aside class="notes">
+              S is soft thresholding parameter
+              rho is penalty parameter
+            </aside>
+          </section>
+          <section class="center">
+              \[
+              x^{k+1} = \arg \min_x \frac{1}{2} \left|\| Ax - b \right\|^2_2 + \frac{\rho}{2} \left\| x - z + u \right\|^2_2
+            \]
+            <pre><code data-trim class="language-r"><script type="text/template">
+                d.x_update <- d(function(x_prev, A, b, u_prev, rho, z_prev) {
+                  argmin(x_prev, function(x_prev)
+                    (1/2)*l2_norm(A %*% x_prev - b)^2 +
+                    (rho/2)*l2_norm(x_prev - z_prev + u_prev)^2)
+                })
+            </script></code></pre>
+            <aside class="notes">
+              S is soft thresholding parameter
+              rho is penalty parameter
+            </aside>
+          </section>
+          <section class="center">
+              \[
+            \begin{aligned}
+              x^{k+1} &= \ldots \\
+              z^{k+1} &= S_z(\overline{x}^{k+1} +\overline{u}) \\
+              u^{k+1} &= u + x^{k+1} - z^{k+1}
+            \end{aligned}
+            \]
+            <pre><code data-trim class="language-r"><script type="text/template">
+                while (l1_norm(z_curr - z_prev) > tolerance) {
+                  ...
+                  x_curr <- d.x_update(x_prev, A, b, u_prev, rho, z_prev)
+                  z_curr <- S_z(rowMeans(emerge(x_curr)) +
+                                rowMeans(emerge(u_curr)))
+                  u_curr <- u_prev + x_curr - z_curr
+                }
+            </script></code></pre>
+            <aside class="notes">
+              S is soft thresholding parameter
+              rho is penalty parameter
+            </aside>
           </section>
         </section>
-        <section class="center"><section class="center"><h2>orcv</h2></section>
+        <section class="center">
+          <section class="center"><h2>Live Demonstration</h2></section>
+          <section class="center"><h2>Backup Demonstration</h2>
+            <div id="lsmr" class="player"></div></section>
+        </section>
+        <section class="center"><section class="center"><h2>Discussion</h2></section>
+          <section data-markdown class="center">
+            <textarea data-template>
+              ## Discussion
+
+              - A further step
+              - Simple by design
+              - Extensions
+                - Self-healing data
+                - Refinement & robustness in face of real-world use
+            </textarea>
+          </section></section>
+        <section class="center"><section class="center"><h2>Appendix</h2></section>
           <section class="center">
+            <h2>orcv</h2>
             <img src="images/orcv.svg">
             <aside class="notes">
               A "Listener" for incoming connections is started in a
@@ -187,10 +287,9 @@
               data into the passed queues, which the R process performs
               a blocking pop on.
             </aside>
-          </section></section>
-        <section>
-          <section class="center"><h2>chunknet</h2></section>
+          </section>
           <section data-vertical-align-top>
+            <h2>chunknet</h2>
             <div id="chunknet" style="text-align:top;"></div>
             <aside class="notes">
               To call computations on chunks in a distributed manner.
@@ -263,15 +362,6 @@
           <section class="center">
             <img src="images/worker-data.svg">
             <img src="images/locator-data.svg">
-            <div id="gc" style="text-align:center;"></div>
-          </section>
-        </section>
-        <section class="center">
-          <section class="center"><h2>largescaleobjects</h2></section>
-          <section class="center">
-            Distributed Object
-            <div id="distobjref" style="text-align:center;"></div>
-            <aside class="notes">Array of Chunk References</aside>
           </section>
           <section data-markdown class="center">
             <textarea data-template>
@@ -316,76 +406,6 @@
             </textarea>
           </section>
         </section>
-        <section>
-          <section class="center"><h2>largescalemodels</h2></section>
-          <section>
-            dLM
-            <div id="dlm" style="text-align:top;"></div>
-          </section>
-          <section class="center">
-            <h2>dLASSO</h2>
-            \[
-              \begin{aligned}
-                A = \begin{bmatrix}
-                    A_1\\
-                    \vdots \\
-                    A_N
-                \end{bmatrix},&
-                \quad b=\begin{bmatrix}
-                    b_1\\
-                    \vdots \\
-                    b_N
-                \end{bmatrix}\\
-                A_i \in \mathbb{R}^{m_i\times n},& \quad b_i \in \mathbb{R}^{m_i}
-            \end{aligned}
-          \]
-          </section>
-          <section class="center">
-            \[
-          \begin{aligned}
-            x^{k+1} &= \arg \min_x \frac{1}{2} \left|\| Ax - b \right\|^2_2 + \frac{\rho}{2} \left\| x - z + u \right\|^2_2 \\
-            z^{k+1} &= S_z(\overline{x}^{k+1} +\overline{u}) \\
-            u^{k+1} &= u + x^{k+1} - z^{k+1}
-          \end{aligned}
-          \]
-            <aside class="notes">
-              S is soft thresholding parameter
-              rho is penalty parameter
-            </aside>
-          </section>
-          <section class="center">
-            <pre><code data-trim class="language-r"><script type="text/template">
-                d.x_update <- d(function(x_prev, A, b, u_prev, rho, z_prev) {
-                  argmin(x_prev, function(x_prev)
-                    (1/2)*l2_norm(A %*% x_prev - b)^2 +
-                    (rho/2)*l2_norm(x_prev - z_prev + u_prev)^2)
-                })
-            </script></code></pre>
-            <pre><code data-trim class="language-r"><script type="text/template">
-                while (l1_norm(z_curr - z_prev) > tolerance) {
-                  ...
-                  x_curr <- d.x_update(x_prev, A, b, u_prev, rho, z_prev)
-                  z_curr <- S_z(rowMeans(emerge(x_curr)) +
-                                rowMeans(emerge(u_curr)))
-                  u_curr <- u_prev + x_curr - z_curr
-                }
-            </script></code></pre>
-          </section>
-          <section class="center"><h2>Usage</h2>
-            <div id="lsmr" class="player"></div></section>
-        </section>
-        <section class="center"><section class="center"><h2>Discussion</h2></section>
-          <section data-markdown class="center">
-            <textarea data-template>
-              ## Discussion
-
-              - A further step
-              - Simple by design
-              - Extensions
-                - Self-healing data
-                - Refinement & robustness in face of real-world use
-            </textarea>
-          </section></section>
       </div>
     </div>
     <script type="module" src="scripts/main.js"></script>
