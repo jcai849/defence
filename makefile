@@ -1,4 +1,4 @@
-all: images/orcv.svg images/worker-data.svg images/locator-data.svg assets/graphs/chunknet_1.dot # assets/graphs/dlm_1.dot # assets/graphs/chunk-call_1.dot
+all: images/orcv.svg images/worker-data.svg images/locator-data.svg # assets/graphs/chunknet_1.dot # assets/graphs/dlm_1.dot # assets/graphs/chunk-call_1.dot
 
 images/%.svg: assets/%.svgbob
 	svgbob --background none $< >$@

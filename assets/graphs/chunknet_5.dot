@@ -1,0 +1,15 @@
+digraph {
+	graph [bgcolor=transparent compound=true]
+	Client
+	Locator
+	"Worker 2"
+	"Worker 2" -> "Worker 2" [label=Computing]
+	subgraph "cluster_Worker 1" {
+		graph [label="Worker 1"]
+		Processing
+		"Data Store"
+		"Computation Store"
+	}
+	Processing -> "Computation Store" [label="Register Computation"]
+	Client -> Processing [label="GET /data"]
+}

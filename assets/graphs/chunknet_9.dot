@@ -1,0 +1,20 @@
+digraph {
+	graph [bgcolor=transparent compound=true]
+	Client
+	Locator
+	"Worker 2"
+	Client -> Processing [label="GET /data"]
+	subgraph "cluster_Worker 1" {
+		graph [label="Worker 1"]
+		Processing
+		"Data Store"
+		"Computation Store"
+	}
+	subgraph "cluster_Worker 1" {
+		graph [label="Worker 1"]
+		Processing
+		"Data Store"
+		"Computation Store"
+	}
+	"Worker 2" -> Processing [label="Requested Data"]
+}
