@@ -45,8 +45,7 @@ async function createStaticGraph(graphName) {
 createStaticGraph("distobjref")
 createStaticGraph("gc")
 createStaticGraph("dreduce")
-createGraphWithButtons("graph1", 3)
 createGraphWithButtons("chunknet", 13)
 createGraphWithButtons("chunk-call", 6)
-createGraphWithButtons("dlm", 10)
+createGraphWithButtons("dlm", 12)
 

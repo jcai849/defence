@@ -1,0 +1,38 @@
+digraph {
+	graph [bgcolor=transparent compound=true]
+	subgraph cluster_Master {
+		graph [label=Master]
+		"dlm(DO1)"
+		"ChunkRef 4"
+		"ChunkRef 5"
+		"ChunkRef 6"
+		"Chunk 6b" [label="Chunk 6"]
+		subgraph "cluster_Distributed Object 1" {
+			graph [label="Distributed Object 1"]
+			"ChunkRef 1"
+			"ChunkRef 2"
+			"ChunkRef 3"
+		}
+	}
+	subgraph "cluster_Worker 1" {
+		graph [label="Worker 1"]
+		"Chunk 1"
+		"Chunk 2"
+		"Chunk 4"
+		"Chunk 5"
+	}
+	subgraph "cluster_Worker 2" {
+		graph [label="Worker 2"]
+		"Chunk 3"
+		"Chunk 5b" [label="Chunk 5"]
+		"Chunk 6"
+	}
+	"ChunkRef 1" -> "Chunk 1" [style=dashed]
+	"ChunkRef 2" -> "Chunk 2" [style=dashed]
+	"ChunkRef 3" -> "Chunk 3" [style=dashed]
+	"dlm(DO1)" -> "Chunk 6b" [label="returns"]
+	"ChunkRef 4" -> "Chunk 4" [style=dashed]
+	"ChunkRef 5" -> "Chunk 5" [style=dashed]
+	"ChunkRef 5" -> "Chunk 5b" [style=dashed]
+	"ChunkRef 6" -> "Chunk 6" [style=dashed]
+}
