@@ -1,6 +1,5 @@
 node_modules
 .direnv
-assets/graphs
 graph-gen/__pycache__
 graph-gen/typings/graphviz
 images/orcv.svg
